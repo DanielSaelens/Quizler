@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Quizler</string>
+    <string name="label_true">True</string>
+    <string name="label_false">False</string>
+    <string name="label_next">Next</string>
+    <string name="label_previous">Previous</string>
+    <string name="question1">Colorado School of Mines is located in South Bend, IN.</string>
+    <string name="question2">The Battle of Hastings occurred in 1066.</string>
+    <string name="question3">School of Mines located in Colorado and South Dakota. </string>
+    <string name="question4">School of Mines has a bowling team.</string>
+    <string name="question5">School of Mines has the best Professors</string>
+    <string name="label_score_formatter">Score: %1$d</string>
+    <string name="message_correct">Your wisdom is unmatched by any in the kingdom!</string>
+    <string name="message_wrong">You must consult the elders for additional knowledge </string>
+</resources>
