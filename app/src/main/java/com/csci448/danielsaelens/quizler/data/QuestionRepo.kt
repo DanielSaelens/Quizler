@@ -1,7 +1,8 @@
 package com.csci448.danielsaelens.quizler.data
 
+import android.util.Log
 import com.csci448.danielsaelens.quizler.R
-
+private const val LOG_TAG = "448.QuestionRepo"
 object QuestionRepo {
 
     val questions = listOf(
@@ -12,6 +13,8 @@ object QuestionRepo {
         Question(R.string.question5, answer = 1)
 
     )
-
+    init {
+        Log.d(LOG_TAG, "QuestionRepo initialized")
+    }
 
 }
