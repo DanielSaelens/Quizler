@@ -10,7 +10,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -22,17 +24,39 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.csci448.danielsaelens.quizler.data.Question
+import com.csci448.danielsaelens.quizler.ui.theme.Blue20
+import com.csci448.danielsaelens.quizler.ui.theme.Gold60
+import com.csci448.danielsaelens.quizler.ui.theme.Red40
 
 private const val LOG_TAG = "448.QuestionDisplay"
+// defaultButtonColors
+
+
 
 @Composable
+
 fun QuestionDisplay(question: Question, answered: Boolean? = null,  onAnswered: (Int) -> Unit ) {
     Log.d(LOG_TAG, "Question display $question")
+
+
+    val correctButtonColors = ButtonDefaults.buttonColors(
+        disabledContainerColor = Gold60,
+        disabledContentColor   = Blue20
+    )
+
+    val incorrectButtonColors = ButtonDefaults.buttonColors(
+
+        disabledContainerColor = Red40,
+        disabledContentColor = Gold60
+
+    )
+    val defaultButtonColors = ButtonDefaults.buttonColors()
+
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Card(
+        ElevatedCard(
             modifier = Modifier.fillMaxWidth().height(445.dp)
         ) {
             Box(
@@ -53,19 +77,75 @@ fun QuestionDisplay(question: Question, answered: Boolean? = null,  onAnswered: 
             modifier = Modifier.padding(16.dp)
         ) {
             QuestionButton(
-                buttonText = stringResource(R.string.label_false),
+                buttonText = stringResource(id = question.choice1Id),
                 onButtonClick = { onAnswered(0) },
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                enabled = answered == null,
+                colors = when {
+                    answered == true && question.answer == 0 -> correctButtonColors
+                    answered == false && question.answer == 0 -> incorrectButtonColors
+                    else -> defaultButtonColors
+                }
             )
             QuestionButton(
-                buttonText = stringResource(id = R.string.label_true),
+                buttonText = stringResource(id = question.choice2Id),
                 onButtonClick = { onAnswered(1) },
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                enabled = answered == null,
+                colors = when {
+                    answered == true && question.answer == 1 -> correctButtonColors
+                    answered == false && question.answer == 1 -> incorrectButtonColors
+                    else -> defaultButtonColors
+                }
+
             )
         }
+         if(question.choice3Id != null) {
+             Row(
+                 horizontalArrangement = Arrangement.spacedBy(16.dp),
+                 modifier = Modifier.padding(16.dp)
+             )
+
+             {
+                 QuestionButton(
+                     buttonText = stringResource(id = question.choice3Id),
+                     onButtonClick = { onAnswered(2) },
+                     modifier = Modifier.weight(1f),
+                     enabled = answered == null,
+                     colors = when {
+                         answered == true && question.answer == 2 -> correctButtonColors
+                         answered == false && question.answer == 2 -> incorrectButtonColors
+                         else -> defaultButtonColors
+                     }
+                 )
+
+                 if (question.choice4Id != null) {
+                     QuestionButton(
+                         buttonText = stringResource(id = question.choice4Id),
+                         onButtonClick = { onAnswered(3) },
+                         modifier = Modifier.weight(1f),
+                         enabled = answered == null,
+                         colors = when {
+                             answered == true && question.answer == 3 -> correctButtonColors
+                             answered == false && question.answer == 3 -> incorrectButtonColors
+                             else -> defaultButtonColors
+                         }
+
+                     )
+
+
+                 }
+             }
+         }
+
+
+
+
+
+
         Spacer(modifier = Modifier.height(64.dp))
         if (answered != null) {
-            Card(
+            ElevatedCard(
                 modifier = Modifier.fillMaxWidth().padding(16.dp, vertical = 8.dp)
             ) {
                 if (answered) {
@@ -100,5 +180,44 @@ fun PreviewQuestionDisplay(){
     )
 }
 
+@Composable
+@Preview
+fun PreviewQuestionDisplay2(){
+    QuestionDisplay(
+        question = Question(
+            questionTextId = R.string.question6,
+            answer = 2,
+            choice1Id = R.string.q6_choice1,
+            choice2Id = R.string.q6_choice2,
+            choice3Id = R.string.q6_choice3,
+            choice4Id = R.string.q6_choice4
+
+        ),
+        onAnswered = {}
+
+    )
+}
 
 
+@Composable
+@Preview
+fun PreviewQuestionDisplayCorrect(){
+    QuestionDisplay(
+        question = Question(R.string.question1,1),
+        answered = true,
+        onAnswered = {}
+    )
+}
+
+
+
+
+@Composable
+@Preview
+fun PreviewQuestionDisplayInCorrect(){
+    QuestionDisplay(
+        question = Question(R.string.question1, 1),
+        answered = false,
+        onAnswered = {}
+    )
+}

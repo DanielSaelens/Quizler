@@ -27,8 +27,17 @@ class QuizlerViewModel(private val questions: List<Question>,
     val questionState = derivedStateOf { _questionState.value }
 
     init {
-        Log.d(LOG_TAG, "QuizlerViewModel created")
+        if( _quizlerState.value.questionStatuses.isEmpty() ) {
+            _quizlerState.value = _quizlerState.value.copy(
+                questionStatuses = questions.map { QuestionStatus.UNANSWERED }
+            )
+        }
+        Log.d(LOG_TAG, "viewModel initialized!")
     }
+
+
+
+
     override fun onCleared(){
         super.onCleared()
         Log.d(LOG_TAG, "onCleared() called")
@@ -46,7 +55,12 @@ class QuizlerViewModel(private val questions: List<Question>,
 
                 _questionState.value = _questionState.value.copy(
                     currentQuestion = questions[_quizlerState.value.currentQuestionIndex],
-                    answeredCorrectly = null
+                    answeredCorrectly = when(_quizlerState.value.questionStatuses[_quizlerState.value.currentQuestionIndex]){
+                        QuestionStatus.UNANSWERED -> null
+                        QuestionStatus.ANSWERED_CORRECT -> true
+                        QuestionStatus.ANSWERED_INCORRECT -> false
+                    }
+
                 )
             }
 
@@ -58,7 +72,11 @@ class QuizlerViewModel(private val questions: List<Question>,
 
                 _questionState.value = _questionState.value.copy(
                     currentQuestion = questions[_quizlerState.value.currentQuestionIndex],
-                    answeredCorrectly = null
+                    answeredCorrectly = when(_quizlerState.value.questionStatuses[_quizlerState.value.currentQuestionIndex]){
+                        QuestionStatus.UNANSWERED -> null
+                        QuestionStatus.ANSWERED_CORRECT -> true
+                        QuestionStatus.ANSWERED_INCORRECT -> false
+                    }
                 )
 
             }
@@ -75,6 +93,18 @@ class QuizlerViewModel(private val questions: List<Question>,
                 _questionState.value = _questionState.value.copy(
                     answeredCorrectly = isCorrect,
                     score = _quizlerState.value.score
+
+                )
+                // Here
+                val updatedStatuses = _quizlerState.value.questionStatuses.toMutableList()
+                val currentIndex = _quizlerState.value.currentQuestionIndex
+                if(isCorrect){
+                    updatedStatuses[currentIndex] = QuestionStatus.ANSWERED_CORRECT
+                } else{
+                    updatedStatuses[currentIndex] = QuestionStatus.ANSWERED_INCORRECT
+                }
+                _quizlerState.value = _quizlerState.value.copy(
+                    questionStatuses = updatedStatuses
                 )
 
             }
@@ -111,7 +141,9 @@ class QuizlerViewModel(private val questions: List<Question>,
     }
     data class QuizlerState(
         val currentQuestionIndex: Int = 0,
-        val score: Int = 0
+        val score: Int = 0,
+        val questionStatuses:  List<QuestionStatus> = emptyList()
+
     )
 
     fun saveInstanceState(outState: Bundle){
@@ -140,5 +172,7 @@ sealed class QuizlerIntent {
         class Answer(val answer: Int) : QuestionIntent()
     }
 }
+
+
 
 
