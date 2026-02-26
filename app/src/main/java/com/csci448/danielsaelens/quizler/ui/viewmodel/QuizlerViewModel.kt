@@ -127,12 +127,16 @@ class QuizlerViewModel(private val questions: List<Question>,
         private const val KEY_INDEX = "currentQuestionIndex"
         private const val KEY_SCORE = "currentScore"
 
+        private const val KEY_STATUSES = "questionStatuses"
+
         fun createStateFromBundle(inState: Bundle?): QuizlerState {
             Log.d(LOG_TAG, "createStateFromBundle() called with bundle: $inState")
             return inState?.let {
                 val state = QuizlerState(
                     currentQuestionIndex = it.getInt(KEY_INDEX, QuizlerState().currentQuestionIndex),
-                    score = it.getInt(KEY_SCORE, QuizlerState().score)
+                    score = it.getInt(KEY_SCORE, QuizlerState().score),
+                    questionStatuses = it.getIntArray(KEY_STATUSES)?.map { ordinal -> QuestionStatus.entries[ordinal] }?: emptyList()
+
                 )
                 Log.d(LOG_TAG, "Restored state: index=${state.currentQuestionIndex}, score=${state.score}")
                 state
@@ -150,7 +154,7 @@ class QuizlerViewModel(private val questions: List<Question>,
         Log.d(LOG_TAG, "saveInstanceState() called")
         outState.putInt(KEY_INDEX, _quizlerState.value.currentQuestionIndex)
         outState.putInt(KEY_SCORE,_quizlerState.value.score)
-
+        outState.putIntArray(KEY_STATUSES, _quizlerState.value.questionStatuses.map { it.ordinal}.toIntArray())
     }
 
 

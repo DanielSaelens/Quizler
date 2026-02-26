@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -36,6 +37,7 @@ fun QuestionScreen(question: Question,
 
 
 {
+    val orientation = LocalConfiguration.current.orientation
     Log.d(LOG_TAG, "Composing QuestionScreen")
 
 
@@ -51,7 +53,7 @@ fun QuestionScreen(question: Question,
     ) {
 
         QuestionScoreText(score)
-        QuestionDisplay(question = question, onAnswered = onAnswered, answered = answered)
+        QuestionDisplay(question = question, onAnswered = onAnswered, answered = answered, orientation = orientation)
         Row(
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier.padding(16.dp)
@@ -82,7 +84,25 @@ fun PreviewQuestionScreen(){
     )
 
 }
-
+@Composable
+@Preview(device = "spec:parent=pixel_5,orientation=landscape")
+fun PreviewQuestionScreenLandscape() {
+    QuestionScreen(
+        question = Question(
+            questionTextId = R.string.question6,
+            answer = 2,
+            choice1Id = R.string.q6_choice1,
+            choice2Id = R.string.q6_choice2,
+            choice3Id = R.string.q6_choice3,
+            choice4Id = R.string.q6_choice4
+        ),
+        onAnswered = {},
+        onPreviousQuestion = {},
+        onNextQuestion = {},
+        score = 0,
+        answered = null
+    )
+}
 
 
 
