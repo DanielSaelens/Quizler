@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,11 +34,9 @@ fun QuestionScreen(question: Question,
                    onPreviousQuestion: () -> Unit,
                    onNextQuestion: () -> Unit,
                    score: Int,
-                   answered: Boolean?
-)
-
-
-{
+                   answered: Boolean?,
+                   onCheatButtonClick: () -> Unit
+) {
     val orientation = LocalConfiguration.current.orientation
     Log.d(LOG_TAG, "Composing QuestionScreen")
 
@@ -51,24 +51,42 @@ fun QuestionScreen(question: Question,
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
-
-        QuestionScoreText(score)
-        QuestionDisplay(question = question, onAnswered = onAnswered, answered = answered, orientation = orientation)
         Row(
             horizontalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = Modifier.padding(16.dp)
-
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            QuestionButton(buttonText = stringResource(id = R.string.label_previous), onButtonClick = onPreviousQuestion,
-                modifier = Modifier.weight(1f))
-            QuestionButton(buttonText = stringResource(id = R.string.label_next), onButtonClick = onNextQuestion,
-                modifier = Modifier.weight(1f))
-
+            Button(onClick = onCheatButtonClick) {
+                Text("Cheat!")
+            }
+            QuestionScoreText(score)
         }
+            QuestionDisplay(
+                question = question,
+                onAnswered = onAnswered,
+                answered = answered,
+                orientation = orientation
+            )
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                modifier = Modifier.padding(16.dp)
+
+            ) {
+                QuestionButton(
+                    buttonText = stringResource(id = R.string.label_previous),
+                    onButtonClick = onPreviousQuestion,
+                    modifier = Modifier.weight(1f)
+                )
+                QuestionButton(
+                    buttonText = stringResource(id = R.string.label_next),
+                    onButtonClick = onNextQuestion,
+                    modifier = Modifier.weight(1f)
+                )
+
+            }
+        }
+
     }
 
-
-}
 
 @Composable
 @Preview
@@ -79,7 +97,8 @@ fun PreviewQuestionScreen(){
         onPreviousQuestion = {},
         onNextQuestion = {},
         score = 0,
-        answered = null
+        answered = null,
+        onCheatButtonClick = {}
 
     )
 
@@ -100,7 +119,8 @@ fun PreviewQuestionScreenLandscape() {
         onPreviousQuestion = {},
         onNextQuestion = {},
         score = 0,
-        answered = null
+        answered = null,
+        onCheatButtonClick = {}
     )
 }
 

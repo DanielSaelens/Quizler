@@ -58,6 +58,9 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     implementation(libs.androidx.compose.foundation.layout)
+    implementation(libs.androidx.navigation)
+    implementation(libs.kotlin.reflect)
+    testImplementation(libs.junit)
 }
 
 kotlin {

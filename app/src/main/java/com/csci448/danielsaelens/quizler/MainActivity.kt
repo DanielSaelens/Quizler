@@ -14,7 +14,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.compose.rememberNavController
 import com.csci448.danielsaelens.quizler.data.QuestionRepo
+import com.csci448.danielsaelens.quizler.ui.navigation.QuizlerNavHost
 import com.csci448.danielsaelens.quizler.ui.question.QuestionScreen
 import com.csci448.danielsaelens.quizler.ui.theme.QuizlerTheme
 import com.csci448.danielsaelens.quizler.ui.viewmodel.QuizlerIntent
@@ -120,22 +122,19 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 private fun MainActivityContent(viewModel: QuizlerViewModel){
-    val questionState = viewModel.questionState.value
+    val navController = rememberNavController()
     QuizlerTheme {
         Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-            QuestionScreen(
-                question = questionState.currentQuestion,
-                onAnswered = { answerChoice ->
-                    viewModel.handleIntent(QuizlerIntent.QuestionIntent.Answer(answerChoice))
-                },
-                onPreviousQuestion = { viewModel.handleIntent(QuizlerIntent.QuestionIntent.Previous)},
-                onNextQuestion = {viewModel.handleIntent(QuizlerIntent.QuestionIntent.Next)},
-                score = questionState.score,
-                answered = questionState.answeredCorrectly
+            QuizlerNavHost(
+                modifier = Modifier.padding(innerPadding),
+                navController = navController,
+                quizlerViewModel = viewModel
             )
-        }
-    }
 
+        }
+
+
+    }
 }
 
 @Preview
