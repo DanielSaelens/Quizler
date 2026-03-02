@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.csci448.danielsaelens.quizler.data.QuestionRepo
+import com.csci448.danielsaelens.quizler.ui.viewmodel.state.QuizlerState
 
 class QuizlerViewModelFactory(private val bundle: Bundle?) : ViewModelProvider.NewInstanceFactory(){
 private val initialState = QuizlerViewModel.createStateFromBundle(bundle)
@@ -19,7 +20,7 @@ private val initialState = QuizlerViewModel.createStateFromBundle(bundle)
             return modelClass
                 .getConstructor(
                     List::class.java,
-                    QuizlerViewModel.QuizlerState::class.java
+                    QuizlerState::class.java
                 )
                 .newInstance(
                     QuestionRepo.questions,

@@ -19,9 +19,11 @@ import com.csci448.danielsaelens.quizler.data.QuestionRepo
 import com.csci448.danielsaelens.quizler.ui.navigation.QuizlerNavHost
 import com.csci448.danielsaelens.quizler.ui.question.QuestionScreen
 import com.csci448.danielsaelens.quizler.ui.theme.QuizlerTheme
-import com.csci448.danielsaelens.quizler.ui.viewmodel.QuizlerIntent
 import com.csci448.danielsaelens.quizler.ui.viewmodel.QuizlerViewModel
 import com.csci448.danielsaelens.quizler.ui.viewmodel.QuizlerViewModelFactory
+import com.csci448.danielsaelens.quizler.ui.viewmodel.state.QuizlerState
+import com.csci448.danielsaelens.quizler.ui.viewmodel.intent.QuizlerIntent
+import com.csci448.danielsaelens.quizler.ui.viewmodel.intent.QuestionIntent
 
 class MainActivity : ComponentActivity() {
     private lateinit var _viewModel: QuizlerViewModel
@@ -140,6 +142,6 @@ private fun MainActivityContent(viewModel: QuizlerViewModel){
 @Preview
 @Composable
 fun PreviewMainActivityContent() {
-    MainActivityContent(QuizlerViewModel(QuestionRepo.questions, QuizlerViewModel.QuizlerState()))
+    MainActivityContent(QuizlerViewModel(QuestionRepo.questions, QuizlerState()))
 }
 

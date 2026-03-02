@@ -7,18 +7,25 @@ import androidx.compose.runtime.Composable
 
 @Composable
 fun CheatScreen(
-    onCheatButtonClick:() -> Unit,
-    onGoBackButtonClick:() -> Unit
+    onCheatButtonClick: () -> Unit,
+    onGoBackButtonClick: () -> Unit,
+    cheated: Boolean,
+    answer: String
 ) {
     Column {
         Text("Are you sure you want to cheat?")
-        Button(onClick = onCheatButtonClick) {
+        Button(
+            onClick = onCheatButtonClick,
+            enabled = !cheated
+        ) {
             Text("Cheat!")
+        }
+        if (cheated) {
+            Text(answer)
         }
         Button(onClick = onGoBackButtonClick) {
             Text("Go Back!")
         }
-
     }
 }
 

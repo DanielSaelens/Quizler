@@ -2,10 +2,12 @@ package com.csci448.danielsaelens.quizler.ui.navigation.specs
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.csci448.danielsaelens.quizler.ui.question.QuestionScreen
-import com.csci448.danielsaelens.quizler.ui.viewmodel.QuizlerIntent
 import com.csci448.danielsaelens.quizler.ui.viewmodel.QuizlerViewModel
+import com.csci448.danielsaelens.quizler.ui.viewmodel.intent.QuizlerIntent
+import com.csci448.danielsaelens.quizler.ui.viewmodel.intent.QuestionIntent
 
 // IScreenSpec defines a contract that every screen in the app must follow —
 // each screen must declare its route (a URL-like identifier) and its composable content.
@@ -23,16 +25,17 @@ object QuestionScreenSpec : IScreenSpec {
         quizlerViewModel: QuizlerViewModel,
         navController: NavController
     ) {
-        val questionState = quizlerViewModel.questionState.value
+
+        val (state, dispatcher, effect) = quizlerViewModel.questionContract.use()
         QuestionScreen(
-            question = questionState.currentQuestion,
+            question = state.currentQuestion,
             onAnswered = { answerChoice ->
-                quizlerViewModel.handleIntent(QuizlerIntent.QuestionIntent.Answer(answerChoice))
+                dispatcher.invoke(QuestionIntent.Answer(answerChoice))
             },
-            onPreviousQuestion = { quizlerViewModel.handleIntent(QuizlerIntent.QuestionIntent.Previous) },
-            onNextQuestion = { quizlerViewModel.handleIntent(QuizlerIntent.QuestionIntent.Next) },
-            score = questionState.score,
-            answered = questionState.answeredCorrectly,
+            onPreviousQuestion = { dispatcher.invoke(QuestionIntent.Previous) },
+            onNextQuestion = { dispatcher.invoke(QuestionIntent.Next) },
+            score = state.score,
+            answered = state.answeredCorrectly,
             onCheatButtonClick = { navController.navigate(CheatScreenSpec.route) }
         )
     }
